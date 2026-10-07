@@ -1,6 +1,6 @@
 /* ============================================================
    WEBSHIELD PRO — script.js
-   Interactions: nav scroll, mobile menu, billing toggle,
+   Interactions: nav scroll, mobile menu,
    form handlers, scroll reveal, toast notifications
    ============================================================ */
 
@@ -49,26 +49,6 @@
     });
   });
 })();
-
-/* ===== BILLING TOGGLE ===== */
-function toggleBilling() {
-  const toggle   = document.getElementById('billing-toggle');
-  const price    = document.getElementById('pro-price');
-  const period   = document.getElementById('pro-period');
-  const note     = document.getElementById('pro-annual-note');
-
-  if (!toggle || !price) return;
-
-  if (toggle.checked) {
-    price.textContent  = '$12';
-    period.textContent = '/ month';
-    if (note) note.textContent = 'Billed annually at $149/year. You save $79.';
-  } else {
-    price.textContent  = '$19';
-    period.textContent = '/ month';
-    if (note) note.textContent = 'Billed monthly. Switch to annual and save $79/year.';
-  }
-}
 
 /* ===== TOAST NOTIFICATION ===== */
 function showToast(message, duration = 3500) {
@@ -129,6 +109,26 @@ function handleToolkitDownload() {
 }
 
 /* ===== SIGNUP FORM HANDLER ===== */
+function buildMailtoLink(recipient, subject, body) {
+  const params = new URLSearchParams({
+    subject,
+    body
+  });
+
+  return `mailto:${recipient}?${params.toString()}`;
+}
+
+function openMailDraft(recipient, subject, body) {
+  const mailtoLink = buildMailtoLink(recipient, subject, body);
+
+  try {
+    window.location.href = mailtoLink;
+  } catch (error) {
+    console.warn('mailto fallback triggered:', error);
+    showToast(`📧 Please email ${recipient} with your message.`);
+  }
+}
+
 function handleSignup(event) {
   event.preventDefault();
   const form     = document.getElementById('signup-form');
@@ -137,8 +137,8 @@ function handleSignup(event) {
   const name     = document.getElementById('signup-name');
   const email    = document.getElementById('signup-email');
   const business = document.getElementById('signup-business');
+  const plan      = document.getElementById('signup-plan');
 
-  // Basic validation
   let valid = true;
   [name, email, business].forEach(field => {
     if (!field) return;
@@ -157,14 +157,23 @@ function handleSignup(event) {
     return;
   }
 
-  // Simulate submission
   if (btn) {
     btn.disabled = true;
     btn.innerHTML = `
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
-      Creating your account…
+      Preparing email…
     `;
   }
+
+  const selectedPlan = plan ? plan.options[plan.selectedIndex]?.text || 'WebShield Pro' : 'WebShield Pro';
+  const mailtoBody = [
+    `Full Name: ${name.value.trim()}`,
+    `Business Email: ${email.value.trim()}`,
+    `Business Name: ${business.value.trim()}`,
+    `Selected Plan: ${selectedPlan}`,
+    '',
+    'Please send me details to start my WebShield Pro trial.'
+  ].join('\n');
 
   setTimeout(() => {
     if (btn) {
@@ -173,9 +182,10 @@ function handleSignup(event) {
     }
     if (form) form.reset();
     if (success) success.hidden = false;
-    showToast('🎉 Welcome to WebShield Pro! Check your email to confirm.');
+    openMailDraft('webshieldpro12@gmail.com', `WebShield Pro trial request - ${business.value.trim()}`, mailtoBody);
+    showToast('📧 Your email app is opening with your signup details.');
     setTimeout(() => { if (success) success.hidden = true; }, 6000);
-  }, 2000);
+  }, 800);
 }
 
 /* ===== CONTACT FORM HANDLER ===== */
@@ -186,6 +196,7 @@ function handleContact(event) {
   const btn     = document.getElementById('contact-submit-btn');
   const name    = document.getElementById('contact-name');
   const email   = document.getElementById('contact-email');
+  const subject = document.getElementById('contact-subject');
   const message = document.getElementById('contact-message');
 
   let valid = true;
@@ -210,9 +221,18 @@ function handleContact(event) {
     btn.disabled = true;
     btn.innerHTML = `
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
-      Sending…
+      Preparing email…
     `;
   }
+
+  const selectedSubject = subject && subject.value ? subject.options[subject.selectedIndex]?.text || 'General enquiry' : 'General enquiry';
+  const mailtoBody = [
+    `Name: ${name.value.trim()}`,
+    `Email: ${email.value.trim()}`,
+    `Subject: ${selectedSubject}`,
+    '',
+    message.value.trim()
+  ].join('\n');
 
   setTimeout(() => {
     if (btn) {
@@ -221,15 +241,16 @@ function handleContact(event) {
     }
     if (form) form.reset();
     if (success) success.hidden = false;
-    showToast('✉️ Message sent! We\'ll be in touch within 1 business day.');
+    openMailDraft('webshieldpro12@gmail.com', `WebShield Pro contact: ${selectedSubject}`, mailtoBody);
+    showToast('✉️ Your email app is opening with your message.');
     setTimeout(() => { if (success) success.hidden = true; }, 6000);
-  }, 1800);
+  }, 800);
 }
 
 /* ===== SCROLL REVEAL ===== */
 (function initScrollReveal() {
   const revealElements = document.querySelectorAll(
-    '.feature-card, .pricing-card, .section-header, .contact-item, .contact-guarantee, .trust-logo-pill'
+    '.feature-card, .section-header, .contact-item, .contact-guarantee, .trust-logo-pill'
   );
 
   revealElements.forEach(el => el.classList.add('reveal'));
