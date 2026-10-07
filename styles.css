@@ -195,12 +195,20 @@ input, textarea, select { font-family: var(--font-body); }
   gap: var(--sp-md);
 }
 
-.nav-links {
+.nav-menu {
   display: flex;
-  flex: 0 0 auto;
+  flex-shrink: 0;
   align-items: center;
   gap: var(--sp-sm);
   margin-left: auto;
+  white-space: nowrap;
+}
+
+.nav-links {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--sp-sm);
 }
 .nav-link {
   font-family: var(--font-head);
@@ -989,42 +997,54 @@ input, textarea, select { font-family: var(--font-body); }
   .hero-shield-visual { width: 45vw; right: 1%; }
 }
 
-@media (min-width: 769px) and (max-width: 900px) {
+@media (min-width: 841px) and (max-width: 900px) {
   .nav.container { padding: 0 var(--sp-md); }
   .nav-link { padding: 6px; }
   .nav-actions .btn { padding-left: 12px; padding-right: 12px; }
 }
 
-@media (max-width: 768px) {
-  .container { padding: 0 var(--sp-md); }
-  .nav-links, .nav-actions { display: none; }
+@media (max-width: 840px) {
   .hamburger { display: flex; }
 
-  .nav-links.open {
-    display: flex;
-    flex-direction: column;
+  .nav-menu {
+    display: none;
     position: absolute;
-    top: 72px; left: 0; right: 0;
-    background: var(--white);
-    border-bottom: 1px solid var(--mist);
-    padding: var(--sp-md);
-    gap: var(--sp-xs);
-    box-shadow: var(--shadow-md);
-    z-index: 999;
-  }
-  .nav-actions.open {
-    display: flex;
-    position: absolute;
-    top: calc(72px + 220px);
-    left: 0; right: 0;
-    background: var(--white);
+    top: 100%;
+    left: 0;
+    right: 0;
     flex-direction: column;
-    padding: var(--sp-md);
-    border-bottom: 1px solid var(--mist);
+    align-items: stretch;
     gap: var(--sp-sm);
-    z-index: 999;
+    padding: var(--sp-md);
+    background: var(--white);
+    border-bottom: 1px solid var(--mist);
+    box-shadow: var(--shadow-md);
   }
+  .nav-menu.open { display: flex; }
 
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--sp-xs);
+  }
+  .nav-link {
+    display: block;
+    padding: var(--sp-sm) var(--sp-md);
+  }
+  .nav-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .nav-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 var(--sp-md); }
   .hero {
     min-height: 0;
     display: block;

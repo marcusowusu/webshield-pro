@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=nav-spacing-2" />
 </head>
 <body>
 
@@ -40,18 +40,20 @@
         <span class="logo-text">WebShield <span class="logo-pro">Pro</span></span>
       </a>
 
-      <ul class="nav-links" id="nav-links">
-        <li><a href="#features" class="nav-link">Features</a></li>
-        <li><a href="#toolkit" class="nav-link">Free Toolkit</a></li>
-        <li><a href="#contact" class="nav-link">Contact</a></li>
-      </ul>
+      <div class="nav-menu" id="nav-menu">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#features" class="nav-link">Features</a></li>
+          <li><a href="#toolkit" class="nav-link">Free Toolkit</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
 
-      <div class="nav-actions">
-        <a href="#signup" class="btn btn-ghost" id="nav-signin-btn">Sign In</a>
-        <a href="#signup" class="btn btn-primary" id="nav-cta-btn">Get Started Free</a>
+        <div class="nav-actions">
+          <a href="#signup" class="btn btn-ghost" id="nav-signin-btn">Sign In</a>
+          <a href="#signup" class="btn btn-primary" id="nav-cta-btn">Get Started Free</a>
+        </div>
       </div>
 
-      <button class="hamburger" id="hamburger-btn" aria-label="Open menu">
+      <button class="hamburger" id="hamburger-btn" type="button" aria-label="Open menu" aria-controls="nav-menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </nav>

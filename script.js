@@ -20,14 +20,13 @@
 /* ===== MOBILE HAMBURGER ===== */
 (function initHamburger() {
   const btn   = document.getElementById('hamburger-btn');
-  const links = document.getElementById('nav-links');
-  const acts  = document.querySelector('.nav-actions');
-  if (!btn || !links) return;
+  const menu  = document.getElementById('nav-menu');
+  if (!btn || !menu) return;
 
   btn.addEventListener('click', () => {
-    const open = links.classList.toggle('open');
-    if (acts) acts.classList.toggle('open', open);
+    const open = menu.classList.toggle('open');
     btn.setAttribute('aria-expanded', open);
+    btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     // Animate hamburger → X
     const spans = btn.querySelectorAll('span');
     if (open) {
@@ -39,12 +38,11 @@
     }
   });
 
-  // Close on nav link click
-  document.querySelectorAll('.nav-link').forEach(link => {
+  menu.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
-      links.classList.remove('open');
-      if (acts) acts.classList.remove('open');
+      menu.classList.remove('open');
       btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-label', 'Open menu');
       btn.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
     });
   });
